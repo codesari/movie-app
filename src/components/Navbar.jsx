@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import avatar from "../assets/icons/avatar.png";
+import { logOut } from "../auth/firebase";
 
 //! ÖNEMLİ HUSUS
 //* navbar'a fixed-top özelligi verdik.her sayfada en üstte sabit görünsün diye.fakat navbar fixed old. zaman navbar'in altinda da bir alan oluşmuş oluyor.navbarin altina ekledigimiz sayfalar navbarin alt kismindan baslamis olacak.bunu engellemek icin navbar'in altina onun kapladigi kadar boş bir div verebilir ya da eklediğimiz her sayfa icin navbar kadar margin-top dememiz gerekir.
@@ -68,6 +69,7 @@ const Navbar = () => {
                     className="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-700 hover:bg-gray-100"
                     href="#"
                     role="button"
+                    onClick={() => logOut()}
                   >
                     Logout
                   </span>
