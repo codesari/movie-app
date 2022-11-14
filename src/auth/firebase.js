@@ -4,6 +4,7 @@ import {
   getAuth,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import { Navigate } from "react-router-dom";
 
 //* Your web app's Firebase configuration
 
@@ -22,7 +23,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 //? https://firebase.google.com/docs/auth/web/start adresindeki veri çekme islemini async await ile yaptik.
-export const createUser = async (email, password) => {
+export const createUser = async (email, password, navigate) => {
   // ! yeni bir kullanici olusturmak icin kullanilan firebase metodu
   try {
     const userCredential = await createUserWithEmailAndPassword(
@@ -30,22 +31,25 @@ export const createUser = async (email, password) => {
       email,
       password
     );
+    navigate("/");
+
     console.log(userCredential);
   } catch (error) {
-    console.log(error.message);
+    alert(error.message);
   }
 };
 
-export const signIn = async (email, password) => {
+export const signIn = async (email, password, navigate) => {
   try {
     const userCredential = await signInWithEmailAndPassword(
       auth,
       email,
       password
     );
+    navigate("/");
     console.log(userCredential);
   } catch (error) {
-    console.log(error.message);
+    alert(error.message);
   }
 };
 

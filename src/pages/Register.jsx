@@ -12,8 +12,8 @@ const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    createUser(email, password);
-    navigate("/");
+    createUser(email, password, navigate);
+    //?navigate hook unu firebase.js deki fonksiyona gönderdik.basarili bir register sonrasi doğru bir yönlendirme yaptirabilmek icin navigate'i try bloguna yazmamiz gerekir.
     console.log(firstName, lastName);
   };
   return (
