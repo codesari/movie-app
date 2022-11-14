@@ -1,7 +1,8 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 
 //* Your web app's Firebase configuration
+
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_apiKey,
   authDomain: process.env.REACT_APP_authDomain,
@@ -15,3 +16,24 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 // Initialize Firebase Authentication and get a reference to the service
 const auth = getAuth(app);
+
+//? https://firebase.google.com/docs/auth/web/start adresindeki veri çekme islemini async await ile yaptik.
+export const createUser = async (email, password) => {
+  // ! yeni bir kullanici olusturmak icin kullanilan firebase metodu
+  try {
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    console.log(userCredential);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+//! .env dosyasinde degisiklik yaptiktan sonra projenin kapatilip yekrar acilmasi gerekiyor.(olusan degisikliklerin yansimasi icin)
+//? REACT_APP yazimi zorunlu
+
+//* catch (error) console.log(error.message)
+//? error icindeki message'ı yazdirmak icin.
