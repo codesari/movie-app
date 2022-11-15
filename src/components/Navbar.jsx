@@ -1,16 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import avatar from "../assets/icons/avatar.png";
 import { logOut } from "../auth/firebase";
+import { AuthContext } from "../context/AuthContextProvider";
 
 //! ÖNEMLİ HUSUS
 //* navbar'a fixed-top özelligi verdik.her sayfada en üstte sabit görünsün diye.fakat navbar fixed old. zaman navbar'in altinda da bir alan oluşmuş oluyor.navbarin altina ekledigimiz sayfalar navbarin alt kismindan baslamis olacak.bunu engellemek icin navbar'in altina onun kapladigi kadar boş bir div verebilir ya da eklediğimiz her sayfa icin navbar kadar margin-top dememiz gerekir.
 
 const Navbar = () => {
-  const currentUser = {
-    displayName: "edward",
-  };
-  // const currentUser = false;
+  //! useContext'in icine hangi context'i kullanacagimizi yaziyoruz..
+  const { currentUser } = useContext(AuthContext);
+  // const { currentUser } = useAuthContext();
+  console.log(currentUser);
   return (
     <>
       <nav className=" w-full flex flex-wrap items-center justify-between py-3 bg-gray-900 text-white shadow-lg navbar navbar-expand-lg fixed-top">
@@ -42,6 +43,8 @@ const Navbar = () => {
                   style={{ height: 25, width: 25 }}
                   alt=""
                   loading="lazy"
+                  referrerPolicy="no-referrer"
+                  //! güvenlik gerekçesi ile google'dan avatar cekilemedigi durumda bu satiri ekleyip düzeltiyoruz..
                 />
               </span>
               <ul

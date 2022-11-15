@@ -1,16 +1,31 @@
-import React, { createContext } from "react";
+import React, { createContext, useEffect, useState } from "react";
+import { userObserver } from "../auth/firebase";
 
 //? context olusturma
 export const AuthContext = createContext();
+//* bu context'i baska bir yerde kullanmak icin  useContext(AuthContext) seklinde yaziyoruz
+//?  const {currentUser} = useContext(AuthContext);
+
+//! with custom hook
+// export const useAuthContext = () => {
+//   return useContext(AuthContext);
+// };
 
 const AuthContextProvider = ({ children }) => {
-  return <AuthContext.Provider value={null}>{children}</AuthContext.Provider>;
+  const [currentUser, setCurrentUser] = useState(false);
+
+  useEffect(() => {
+    userObserver(setCurrentUser);
+  }, []);
+  return (
+    <AuthContext.Provider value={{ currentUser }}>
+      {children}
+    </AuthContext.Provider>
+  );
+  //*currentUser'ı obje olarak gönderdik.tüm uygulamada kullanılabilir.(context).kullanirken de destruction yapilabilir..
 };
 
 export default AuthContextProvider;
 
-//* bir context olışturmak için 2 aşama var
-//? 1- create context
-//* 2- use it
-
-//! context'i neredeyse her yerde kullanacagim,authentication old. icin (navbar da vs..).bu yüzden tüm yapiyi sarmallayacak sekilde contexti yazmaliyom.bu yüzden AppRouter'ı sarmalliyorum..
+//! context'i neredeyse her yerde kullanacagim,authentication old. icin (navbar da vs..).bu yüzden tüm yapiyi sarmallayacak sekilde contexti yazmaliyim.bu yüzden AppRouter'ı sarmalliyorum..
+//*

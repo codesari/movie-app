@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import GoogleIcon from "../assets/icons/GoogleIcon";
-import { createUser, signIn } from "../auth/firebase";
+import { signIn, signUpWithGoogle } from "../auth/firebase";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -13,6 +13,9 @@ const Login = () => {
     signIn(email, password, navigate);
 
     console.log(email, password);
+  };
+  const handleGoogleProvider = (e) => {
+    signUpWithGoogle(navigate);
   };
   return (
     <div className="flex justify-items-center">
@@ -83,6 +86,7 @@ const Login = () => {
             <button
               className="flex justify-between border-none outline-none bg-[#ff4b45] custom-input w-[300px] mt-[15px] rounded-[4px] font-[600] cursor-pointer"
               type="button"
+              onClick={handleGoogleProvider}
             >
               Continue with Google
               <GoogleIcon color="currentColor" />

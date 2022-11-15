@@ -2,11 +2,13 @@ import { initializeApp } from "firebase/app";
 import {
   createUserWithEmailAndPassword,
   getAuth,
+  GoogleAuthProvider,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
+  updateProfile,
 } from "firebase/auth";
-import { Navigate } from "react-router-dom";
 
 //* Your web app's Firebase configuration
 
@@ -25,7 +27,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 //? https://firebase.google.com/docs/auth/web/start adresindeki veri çekme islemini async await ile yaptik.
-export const createUser = async (email, password, navigate) => {
+export const createUser = async (email, password, navigate, displayName) => {
   // ! yeni bir kullanici olusturmak icin kullanilan firebase metodu
   try {
     const userCredential = await createUserWithEmailAndPassword(
@@ -33,6 +35,10 @@ export const createUser = async (email, password, navigate) => {
       email,
       password
     );
+    //? kullanici register olduktan hemen sonra user bilgisinin güncellenmesi gerekiyor..
+    await updateProfile(auth.currentUser, {
+      displayName: displayName,
+    });
     navigate("/");
 
     console.log(userCredential);
@@ -56,11 +62,13 @@ export const signIn = async (email, password, navigate) => {
 };
 
 //? Kullanıcının signin olup olmadığını takip eden ve kullanıcı değiştiğinde yeni kullanıcıyı response olarak dönen firebase metodu
-export const userObserver = () => {
+export const userObserver = (setCurrentUser) => {
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      console.log(user);
+      const { email, displayName, photoURL } = user;
+      setCurrentUser({ email, displayName, photoURL });
     } else {
+      setCurrentUser(false);
       console.log("user signed out");
     }
   });
@@ -70,6 +78,22 @@ export const logOut = () => {
   signOut(auth);
 };
 
+//* => Authentication => settings => Authorized domains => add domain
+//! Projeyi deploy ettikten sonra google sign-in çalışması için domain listesine deploy linkini ekle
+
+export const signUpWithGoogle = (navigate) => {
+  const provider = new GoogleAuthProvider();
+
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      console.log(result);
+      navigate("/");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
 //! .env dosyasinde degisiklik yaptiktan sonra projenin kapatilip yekrar acilmasi gerekiyor.(olusan degisikliklerin yansimasi icin)
 //? REACT_APP yazimi zorunlu
 
@@ -77,3 +101,5 @@ export const logOut = () => {
 //? error icindeki message'ı yazdirmak icin.
 
 //* register isleminin basarili olmasi durumunda home sayfasina yönlenmesi icin navigate hookunu try icine almamiz lazim.aksi takdirde basarili-basarisiz tüm denemelerde anasayfaya yönlenecektir ki bu da istenmeyen bir durumdur.
+
+//! her bir metodu fonksiyon haline getirip export edip istedigimiz yerde kullanmka bir avantaj (export const ...)
