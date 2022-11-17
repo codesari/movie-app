@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../context/AuthContextProvider";
 
 const IMG_API = "https://image.tmdb.org/t/p/w1280";
@@ -17,8 +18,17 @@ const MovieCard = ({ poster_path, title, overview, vote_average, id }) => {
       return "red";
     }
   };
+  const navigate = useNavigate();
+
   return (
-    <div className="movie">
+    <div
+      className="movie"
+      onClick={() =>
+        currentUser
+          ? navigate(`/details/${id}`)
+          : alert("Please,log in to show movie details")
+      }
+    >
       <img
         loading="lazy"
         src={poster_path ? IMG_API + poster_path : defaultImage}
@@ -28,7 +38,7 @@ const MovieCard = ({ poster_path, title, overview, vote_average, id }) => {
         <h5>{title}</h5>
         {currentUser && (
           <span className={`tag ${voteColor(vote_average)}`}>
-            {vote_average}
+            {vote_average.toFixed(1)}
           </span>
         )}
       </div>
@@ -44,3 +54,5 @@ export default MovieCard;
 
 //* <span className="tag"> index.css de üc tane renk secenegi var
 //* reg,green,orange olarak..span'in className'ine dinamik olarak bu renklerieklemek istiyoruz
+
+//? {vote_average.toFixed(1)} gelen number ın virgülden sonra tek hane olmasi icin.

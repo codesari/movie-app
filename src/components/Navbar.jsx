@@ -11,7 +11,8 @@ const Navbar = () => {
   //! useContext'in icine hangi context'i kullanacagimizi yaziyoruz..
   const { currentUser } = useContext(AuthContext);
   // const { currentUser } = useAuthContext();
-  console.log(currentUser);
+
+  console.log("currentUser :>> ", currentUser);
   return (
     <>
       <nav className=" w-full flex flex-wrap items-center justify-between py-3 bg-gray-900 text-white shadow-lg navbar navbar-expand-lg fixed-top">
