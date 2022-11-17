@@ -22,6 +22,7 @@ const AuthContextProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
+  //? AuthContext.Provider 'daki AuthContext'i önce yukarida createContext() ile olusturduk sonra .Provider yaptik.
   //*currentUser'ı obje olarak gönderdik.tüm uygulamada kullanılabilir.(context).kullanirken de destruction yapilabilir..
 };
 
