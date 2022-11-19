@@ -66,7 +66,7 @@ const Login = () => {
               <span
                 role="button"
                 className="links-a font-[0.75em] cursor-pointer decoration-none text-[#8f8f8f]"
-                // onClick={() => forgotPassword(email)}
+                onClick={() => navigate("/forgot")}
               >
                 Forgot Password
               </span>

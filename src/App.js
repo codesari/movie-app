@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
+import { ToastContainer } from "react-toastify";
 
 import AuthContextProvider from "./context/AuthContextProvider";
 
@@ -11,8 +12,9 @@ const App = () => {
   // }, []);
 
   return (
-    <div className="bg-[#23242a]">
+    <div className="dark:bg-[#23242a]">
       <AuthContextProvider children={<AppRouter />} />
+      <ToastContainer />
       {/* <AppRouter />
       </AuthContextProvider> */}
     </div>

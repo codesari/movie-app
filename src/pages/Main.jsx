@@ -1,8 +1,10 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import MovieCard from "../components/MovieCard";
 import { AuthContext } from "../context/AuthContextProvider";
+import { toastErrorNotify } from "../helpers/ToastNotify";
+import logo from "../assets/img/movie-time.png";
 
 const API_KEY = process.env.REACT_APP_TMDB_KEY;
 const FEATURED_API = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}`;
@@ -10,16 +12,22 @@ const SEARCH_API = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}
 
 const Main = () => {
   const [movies, setMovies] = useState([]);
-  const { id } = useParams();
-  const navigate = useNavigate();
 
   const { currentUser } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const getMovies = (API) => {
     setSpin(true);
     axios
       .get(API)
-      .then((res) => setMovies(res.data.results))
+      .then((res) => {
+        console.log("res :>> ", res);
+        {
+          res.data.results.length === 0
+            ? navigate("/notfound")
+            : setMovies(res.data.results);
+        }
+      })
       .catch((err) => console.log(err))
       .finally(() => setSpin(false));
   };
@@ -35,13 +43,14 @@ const Main = () => {
     e.preventDefault();
     if (searchWords && currentUser) {
       getMovies(SEARCH_API + searchWords);
-      if (movies.length === 0) {
-        alert("Not found.");
-        // todo ilk anlamsiz stringde calismiyor ikinci stringde calisiyor
-      }
+      // if (movies.length === 0) {
+      //   alert("The movie you search could not be found.");
+      //   // todo ilk anlamsiz stringde calismiyor ikinci stringde calisiyor
+      // }
+
       setSearchWords("");
     } else if (!currentUser) {
-      alert("Please log in to search movie..");
+      toastErrorNotify("Please log in to search movie..");
     } else {
       alert("Please enter a string..");
     }
@@ -49,17 +58,24 @@ const Main = () => {
 
   return (
     <>
-      <form className="flex justify-center p-2" onSubmit={handleSubmit}>
+      <div className="flex justify-center">
+        <img src={logo} alt="" width="400px" />
+      </div>
+      <form
+        className="flex justify-center p-2"
+        type="submit"
+        onSubmit={handleSubmit}
+      >
         <input
           type="search"
-          className="w-80 h-8 rounded-md outline-none border p-1 m-2"
+          className="w-96 h-8 rounded-md outline-none border p-1 m-2"
           placeholder="Search a movie..."
           onChange={(e) => setSearchWords(e.target.value)}
           value={searchWords}
         />
-        <button className="text-white" type="submit">
+        {/* <button className="text-white" type="submit">
           Search
-        </button>
+        </button> */}
       </form>
 
       <div className="flex justify-center flex-wrap">

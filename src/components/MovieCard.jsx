@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContextProvider";
+import { toastErrorNotify } from "../helpers/ToastNotify";
 
 const IMG_API = "https://image.tmdb.org/t/p/w1280";
 // const defaultImage = "https://picsum.photos/200/300";
@@ -23,28 +24,31 @@ const MovieCard = ({ poster_path, title, overview, vote_average, id }) => {
   return (
     <div
       className="movie"
-      onClick={() =>
-        currentUser
-          ? navigate(`/details/${id}`)
-          : alert("Please,log in to show movie details")
-      }
+      onClick={() => {
+        !currentUser &&
+          toastErrorNotify("Please log in to see movie details..");
+        navigate(`/details/${id}`);
+      }}
     >
-      <img
-        loading="lazy"
-        src={poster_path ? IMG_API + poster_path : defaultImage}
-        alt="movie-card"
-      />
-      <div className="flex align-baseline justify-between p-1 text-white">
-        <h5>{title}</h5>
+      <div className="img-div">
+        <img
+          loading="lazy"
+          src={poster_path ? IMG_API + poster_path : defaultImage}
+          alt="movie-card"
+        />
+        <div className="movie-over">
+          <p>{overview}</p>
+        </div>
+      </div>
+
+      <div className="flex align-baseline  justify-between p-1 text-white">
+        <h5 className="flex items-center ml-2 font-bold">{title}</h5>
+
         {currentUser && (
           <span className={`tag ${voteColor(vote_average)}`}>
             {vote_average.toFixed(1)}
           </span>
         )}
-      </div>
-      <div className="movie-over">
-        <h2>Overview</h2>
-        <p>{overview}</p>
       </div>
     </div>
   );
