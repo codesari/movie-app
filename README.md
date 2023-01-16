@@ -1,3 +1,3 @@
 # Demo
 
-![movie.gif](.gif)
+![Movie App](movie.gif)
